@@ -1,0 +1,151 @@
+require "dokidoki.module"
+[[ range, ireverse, map, imap, ifoldl, iforeach, irandomize, iconcat, ifilter,
+   ifilter_in_place, copy, build_array, identity, void, compose, using ]]
+
+function range(first, last, step)
+  step = step or 1
+  local result = {}
+  for i = first, last, step do
+    result[#result+1] = i
+  end
+  return result
+end
+
+function ireverse(a)
+  local result = {}
+  local len = #a
+  for i = 1, len do
+    result[i] = a[len - i + 1]
+  end
+  return result
+end
+
+function map (f, t)
+  local result = {}
+  for k, v in pairs(t) do
+    result[k] = f(v)
+  end
+  return result
+end
+
+function imap (f, a)
+  local result = {}
+  for i, v in ipairs(a) do
+    result[i] = f(v)
+  end
+  return result
+end
+
+function ifoldl(f, init, a)
+  for _, v in ipairs(a) do
+    init = f(init, v)
+  end
+  return init
+end
+
+function iforeach (f, a)
+  for i = 1, #a do
+    f(a[i])
+  end
+end
+
+function irandomize(a)
+  local result = copy(a)
+  for i = 1, #result-1 do
+    local j = math.random(i, #result)
+    local tmp = result[i]
+    result[i] = result[j]
+    result[j] = tmp
+  end
+  return result
+end
+
+function iconcat(a1, a2)
+  local result = copy(a1)
+  local len = #a1
+  for i, v in ipairs(a2) do
+    result[len + i] = v
+  end
+  return result
+end
+
+function ifilter (p, a)
+  local result = {}
+  for k, v in ipairs(a) do
+    if p(v) then result[#result+1] = v end
+  end
+  return result
+end
+
+function ifilter_in_place (p, a)
+  local src = 1
+  while a[src] ~= nil and p(a[src]) do
+    -- [1..src) were already compacted
+    -- [src.. left to check
+    src = src + 1
+  end
+  -- [1..src) were already compacted
+  -- [src.. left to compact
+  local dest = src
+  while a[src] ~= nil do
+    -- [1..dest) compacted
+    -- [src.. to compact
+    if p(a[src]) then
+      a[dest] = a[src]
+      dest = dest + 1
+    end
+    src = src + 1
+  end
+  -- [1, dest) compacted
+  -- [dest.. garbage to nil out
+  while a[dest] ~= nil do
+    a[dest] = nil
+    dest = dest + 1
+  end
+end
+
+function copy (t)
+  local result = {}
+  for k, v in pairs(t) do
+    result[k] = v
+  end
+  return result
+end
+
+function build_array (len, f)
+  local result = {}
+  for i = 1, len do
+    result[i] = f(i)
+  end
+  return result
+end
+
+function identity (...)
+  return ...
+end
+
+function void ()
+end
+
+function compose(f, ...)
+  if select('#', ...) == 0 then 
+    return f
+  else
+    local rest = compose(...)
+    return function (...)
+      return f(rest(...))
+    end
+  end
+end
+
+-- todo recursive
+function using(name)
+  _G[name] = setmetatable({}, {
+    __index = function (t, i)
+      t[i] = require(name .. '.' .. i)
+      return t[i]
+    end
+  })
+end
+
+return get_module_exports()

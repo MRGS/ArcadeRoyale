@@ -1,0 +1,16 @@
+Thrustburst.
+
+
+00000000 - Main loop ended. Waiting for music thread...
+00000001 - Music thread terminated. Saving config...
+00000002 - Config saved.
+00000003 - Shutting down DirectInput.
+00000004 - Cleaning up after OpenGL...
+00000005 - Restoring normal desktop resolution.
+00000006 - Deleting OpenGL context.
+00000007 - Releasing device context.
+00000008 - Destroying window.
+00000009 - Unregistering class.
+0000000A - OpenGL window murdered. Closing OpenAL...
+0000000B - That's it for OpenAL. Cleaning up...
+0000000C - ...and done. Good night.
