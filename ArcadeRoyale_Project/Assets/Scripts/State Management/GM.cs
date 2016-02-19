@@ -40,19 +40,24 @@ public class GM : Singleton<GM> {
 		if (Input.GetKey (KeyCode.Alpha4)) worldState = WorldState.Idle;
 
 		//Things to do in Launcher Mode
-		if (worldState == WorldState.Launcher) {
-			//Increase idle time
-			idleTime += Time.deltaTime;
+        //if (worldState == WorldState.Launcher) {
+        //    //Increase idle time
+        //    idleTime += Time.deltaTime;
 
-			//Reset idle time if a key is pressed
-			if(Input.anyKey) idleTime = 0;
+        //    //Reset idle time if a key is pressed
+        //    if (Input.anyKey) idleTime = 0;
 
-			//Go into Attract mode is key isn't pressed for a while
-			if(idleTime > timeBeforeIdle) worldState = WorldState.Attract;
-		} else {
-			//Reset idleTime if not in Launcher
-			idleTime = 0;
-		}
+        //    //Go into Attract mode is key isn't pressed for a while
+        //    if (idleTime > timeBeforeIdle) {
+
+        //        worldState = WorldState.Attract;
+        //    }
+        //    else {
+
+        //        //Reset idleTime if not in Launcher
+        //        idleTime = 0;
+        //    }
+        //}
 
 		//STATE SWITCHING!
 		//Only switch if the last state isn't this state
